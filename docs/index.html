@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link AI - Free AI Chat</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="navbar">
+        <div class="nav-content">
+            <h1>🔗 Link AI</h1>
+            <div class="nav-controls">
+                <button id="theme-toggle" class="theme-btn">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button id="clear-chat" class="clear-btn">
+                    <i class="fas fa-trash"></i> Clear
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="chat-container">
+            <div id="chat-messages" class="chat-messages">
+                <div class="message ai-message">
+                    <div class="message-content">
+                        <i class="fas fa-robot message-icon"></i>
+                        <div class="message-text">
+                            <h3>Welcome to Link AI! 🚀</h3>
+                            <p>I'm your AI assistant powered by Google Gemini. I can help you with:</p>
+                            <ul>
+                                <li>🤖 General questions and conversations</li>
+                                <li>📝 Writing and editing</li>
+                                <li>💡 Problem solving</li>
+                                <li>🔍 Research and analysis</li>
+                                <li>💻 Programming help</li>
+                            </ul>
+                            <p>What would you like to know?</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <textarea id="user-input" placeholder="Ask me anything..." rows="1"></textarea>
+                    <button id="send-btn" class="send-btn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div class="file-upload-wrapper">
+                    <input type="file" id="file-input" accept="image/*,.pdf,.txt,.doc,.docx" multiple>
+                    <label for="file-input" class="file-label">
+                        <i class="fas fa-paperclip"></i> Attach Files
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loading" class="loading hidden">
+        <div class="loading-spinner"></div>
+        <p>AI is thinking...</p>
+    </div>
+
+    <footer class="footer">
+        <p>© 2024 Link AI - Powered by Google Gemini | 
+        <a href="https://github.com/NRBalpha/link-ai-chat" target="_blank">
+            <i class="fab fa-github"></i> GitHub
+        </a></p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 
