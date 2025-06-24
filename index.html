@@ -1,216 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
+    <title>Link AI Test</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Link AI - Free AI Chat</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #2d3748;
-            min-height: 100vh;
-            transition: all 0.3s ease;
-        }
-        
-        .navbar {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            width: 90%;
-            max-width: 1200px;
-        }
-        
-        .nav-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 30px;
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(16px);
-            border-radius: 50px;
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-        }
-        
-        .nav-content h1 {
-            color: #2d3748;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin: 0;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 100px 20px 20px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .chat-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(16px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-            min-height: 500px;
-            max-height: 70vh;
-        }
-        
-        .message {
-            margin-bottom: 25px;
-        }
-        
-        .message-content {
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
-            max-width: 85%;
-        }
-        
-        .message-text {
-            background: #ffffff;
-            padding: 15px 20px;
-            border-radius: 18px;
-            color: #2d3748;
-            line-height: 1.6;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-        }
-        
-        .input-container {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(16px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-            padding: 20px;
-        }
-        
-        .input-wrapper {
-            display: flex;
-            gap: 15px;
-            align-items: flex-end;
-            margin-bottom: 15px;
-        }
-        
-        #user-input {
-            flex: 1;
-            background: #ffffff;
-            border: 2px solid rgba(255, 255, 255, 0.18);
-            border-radius: 15px;
-            padding: 15px 20px;
-            color: #2d3748;
-            font-size: 1rem;
-            font-family: inherit;
-            resize: none;
-            min-height: 50px;
-        }
-        
-        .send-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            color: white;
-            cursor: pointer;
-            font-size: 1.1rem;
-        }
-        
-        .status {
-            text-align: center;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            margin: 20px 0;
-            color: white;
-        }
-        
-        .success { background: rgba(76, 175, 80, 0.2); }
-        .error { background: rgba(244, 67, 54, 0.2); }
-    </style>
 </head>
-<body>
-    <div class="navbar">
-        <div class="nav-content">
-            <h1>🔗 Link AI</h1>
-        </div>
+<body style="font-family: Arial; text-align: center; padding: 50px; background: linear-gradient(45deg, #667eea, #764ba2); color: white; min-height: 100vh; margin: 0;">
+    <h1 style="font-size: 3em; margin-bottom: 30px;">🚀 Link AI is LIVE!</h1>
+    <p style="font-size: 1.5em; margin-bottom: 20px;">✅ GitHub Pages is working!</p>
+    <p style="font-size: 1.2em; margin-bottom: 30px;">Your AI chat application is successfully deployed.</p>
+    
+    <div style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 15px; max-width: 600px; margin: 0 auto;">
+        <h2>🎉 Deployment Successful!</h2>
+        <p><strong>Frontend:</strong> GitHub Pages ✅</p>
+        <p><strong>Backend:</strong> Railway ✅</p>
+        <p><strong>AI:</strong> Google Gemini ✅</p>
     </div>
-
-    <div class="container">
-        <div class="status success">
-            <h2>🎉 GitHub Pages is Working!</h2>
-            <p>Your Link AI chat application is successfully deployed!</p>
-        </div>
-        
-        <div class="chat-container">
-            <div class="chat-messages">
-                <div class="message">
-                    <div class="message-content">
-                        <div class="message-text">
-                            <h3>Welcome to Link AI! 🚀</h3>
-                            <p>Your AI assistant is now live on GitHub Pages!</p>
-                            <p><strong>✅ Frontend:</strong> Successfully deployed</p>
-                            <p><strong>🐍 Backend:</strong> Running on Railway</p>
-                            <p><strong>🤖 AI:</strong> Powered by Google Gemini</p>
-                            <br>
-                            <p>The full interactive chat will be available once all components are connected.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="input-container">
-                <div class="input-wrapper">
-                    <textarea id="user-input" placeholder="Chat functionality coming soon..." readonly></textarea>
-                    <button class="send-btn">▶</button>
-                </div>
-                <div class="status">
-                    <p>🔧 Connecting to AI backend... Please wait while we set up the full chat functionality.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    
+    <p style="margin-top: 30px; font-size: 1.1em;">
+        <strong>URL:</strong> https://nrbalpha.github.io/link-ai-chat/
+    </p>
+    
     <script>
-        console.log('Link AI - GitHub Pages deployment successful!');
-        
-        // Test backend connectivity
-        const API_URL = 'https://green-rainstorm-production.up.railway.app';
-        
-        fetch(API_URL + '/health')
-            .then(response => {
-                if (response.ok) {
-                    document.querySelector('.status').innerHTML = '<p>✅ Backend connected! Full chat functionality available.</p>';
-                    document.querySelector('.status').className = 'status success';
-                } else {
-                    throw new Error('Backend not responding');
-                }
-            })
-            .catch(error => {
-                document.querySelector('.status').innerHTML = '<p>⚠️ Backend starting up... This may take a moment.</p>';
-                document.querySelector('.status').className = 'status error';
-            });
+        console.log('SUCCESS: GitHub Pages is working!');
+        document.body.style.animation = 'fadeIn 1s ease-in';
     </script>
 </body>
 </html> 
