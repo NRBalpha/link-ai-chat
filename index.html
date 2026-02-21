@@ -1,29 +1,139 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Link AI Test</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link AI - Free AI Chat</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body style="font-family: Arial; text-align: center; padding: 50px; background: linear-gradient(45deg, #667eea, #764ba2); color: white; min-height: 100vh; margin: 0;">
-    <h1 style="font-size: 3em; margin-bottom: 30px;">🚀 Link AI is LIVE!</h1>
-    <p style="font-size: 1.5em; margin-bottom: 20px;">✅ GitHub Pages is working!</p>
-    <p style="font-size: 1.2em; margin-bottom: 30px;">Your AI chat application is successfully deployed.</p>
-    
-    <div style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 15px; max-width: 600px; margin: 0 auto;">
-        <h2>🎉 Deployment Successful!</h2>
-        <p><strong>Frontend:</strong> GitHub Pages ✅</p>
-        <p><strong>Backend:</strong> Railway ✅</p>
-        <p><strong>AI:</strong> Google Gemini ✅</p>
+<body>
+    <div class="navbar">
+        <div class="nav-content">
+            <h1>🔗 Link AI</h1>
+            <div class="nav-controls">
+                <button id="theme-toggle" class="theme-btn">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button id="clear-chat" class="clear-btn">
+                    <i class="fas fa-trash"></i> Clear
+                </button>
+            </div>
+        </div>
     </div>
-    
-    <p style="margin-top: 30px; font-size: 1.1em;">
-        <strong>URL:</strong> https://nrbalpha.github.io/link-ai-chat/
-    </p>
-    
+
+    <div class="container">
+        <div class="welcome-header">
+            <h1 class="welcome-title">Welcome to Link AI</h1>
+            <p class="welcome-description">
+                Your intelligent chat companion powered by cutting-edge technology
+            </p>
+            <div class="action-buttons">
+                <button class="chat-button" onclick="window.location.href='chat.html'">
+                    <i class="fas fa-comments"></i> Start Chatting
+                </button>
+                <button class="signin-button" onclick="window.location.href='templates/signin.html'">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </button>
+                <button class="signup-button" onclick="window.location.href='templates/signup.html'">
+                    <i class="fas fa-user-plus"></i> Sign Up
+                </button>
+            </div>
+        </div>
+
+        <div class="tech-grid">
+            <div class="tech-card frontend-card">
+                <h2 class="tech-card-title">Frontend Technologies</h2>
+                <p class="tech-card-description">
+                    Modern web interface built with cutting-edge frontend technologies. 
+                    Features responsive design, smooth animations, and an intuitive user experience.
+                </p>
+                <div class="tech-logos">
+                    <div class="tech-logo-item html5">
+                        <img src="assets/images/logos/html5.svg" alt="HTML5">
+                        <div class="tech-name">HTML5</div>
+                    </div>
+                    <div class="tech-logo-item css3">
+                        <img src="assets/images/logos/css3.svg" alt="CSS3">
+                        <div class="tech-name">CSS3</div>
+                    </div>
+                    <div class="tech-logo-item javascript">
+                        <img src="assets/images/logos/javascript.svg" alt="JavaScript">
+                        <div class="tech-name">JavaScript</div>
+                    </div>
+                    <div class="tech-logo-item firebase">
+                        <img src="assets/images/logos/firebase.svg" alt="Firebase">
+                        <div class="tech-name">Firebase</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tech-card backend-card">
+                <h2 class="tech-card-title">Backend Technologies</h2>
+                <p class="tech-card-description">
+                    Powerful backend infrastructure combining Python, Flask, and AI capabilities.
+                    Delivers fast, secure, and intelligent responses to user queries.
+                </p>
+                <div class="tech-logos">
+                    <div class="tech-logo-item python">
+                        <img src="assets/images/logos/python.svg" alt="Python">
+                        <div class="tech-name">Python</div>
+                    </div>
+                    <div class="tech-logo-item flask">
+                        <img src="assets/images/logos/flask.svg" alt="Flask">
+                        <div class="tech-name">Flask</div>
+                    </div>
+                    <div class="tech-logo-item ollama">
+                        <img src="assets/images/logos/ollama.svg" alt="Ollama">
+                        <div class="tech-name">Ollama</div>
+                    </div>
+                    <div class="tech-logo-item mistral">
+                        <img src="assets/images/logos/mistral.svg" alt="Mistral">
+                        <div class="tech-name">Mistral</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2024 Link AI - Powered by Google Gemini | 
+        <a href="https://github.com/NRBalpha/link-ai-chat" target="_blank">
+            <i class="fab fa-github"></i> GitHub
+        </a></p>
+    </footer>
+
+    <script src="assets/js/script.js"></script>
     <script>
-        console.log('SUCCESS: GitHub Pages is working!');
-        document.body.style.animation = 'fadeIn 1s ease-in';
+        // Theme toggle functionality
+        document.getElementById('theme-toggle').addEventListener('click', function() {
+            const body = document.body;
+            const icon = this.querySelector('i');
+            
+            if (body.classList.contains('light-theme')) {
+                body.classList.remove('light-theme');
+                icon.className = 'fas fa-moon';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.add('light-theme');
+                icon.className = 'fas fa-sun';
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Initialize theme
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeToggle = document.getElementById('theme-toggle');
+            const icon = themeToggle.querySelector('i');
+            
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-theme');
+                icon.className = 'fas fa-sun';
+            } else {
+                icon.className = 'fas fa-moon';
+            }
+        });
     </script>
 </body>
 </html> 
