@@ -12,7 +12,6 @@ from dotenv import load_dotenv
 import json
 from collections import defaultdict
 import base64
-import threading
 
 # Load environment variables
 load_dotenv()
@@ -54,7 +53,7 @@ if not GEMINI_API_KEY:
 
 genai.configure(api_key=GEMINI_API_KEY)
 
-MODEL_NAME = None
+MODEL_NAME = os.getenv('GEMINI_MODEL', 'gemini-2.0-flash')
 model = None
 
 SYSTEM_INSTRUCTION = (
@@ -167,57 +166,9 @@ SYSTEM_INSTRUCTION = (
     "- Use conversation history to provide contextually relevant responses"
 )
 
-def get_default_model_name():
-    global MODEL_NAME
-    if MODEL_NAME:
-        return MODEL_NAME
-
-    try:
-        print("Discovering available Gemini models...")
-        available_models = []
-        for m in genai.list_models():
-            if 'generateContent' in getattr(m, 'supported_generation_methods', []):
-                available_models.append(m.name)
-
-        if not available_models:
-            print("No models with generateContent support found.")
-            return None
-
-        preferred = [
-            "gemini-3-flash-preview",
-            "gemini-2.5-flash-lite",
-            "gemini-2.5-flash",
-            "gemini-2.0-flash",
-            "gemini-2.5-pro",
-        ]
-
-        for target in preferred:
-            for name in available_models:
-                if target in name:
-                    MODEL_NAME = name
-                    print(f"Using model: {MODEL_NAME}")
-                    return MODEL_NAME
-
-        MODEL_NAME = available_models[0]
-        print(f"Using fallback model: {MODEL_NAME}")
-        return MODEL_NAME
-
-    except Exception as e:
-        print(f"Failed to list models: {e}. Using hardcoded fallback.")
-        MODEL_NAME = "gemini-2.0-flash"
-        return MODEL_NAME
-
 def initialize_model():
     global model, MODEL_NAME
     try:
-        if not MODEL_NAME:
-            MODEL_NAME = get_default_model_name()
-
-        if not MODEL_NAME:
-            print("Could not determine a valid model name.")
-            model = None
-            return False
-
         print(f"Initializing Gemini model: {MODEL_NAME}")
         model = genai.GenerativeModel(
             MODEL_NAME,
@@ -575,23 +526,15 @@ def verify_code():
     del verification_codes[email]
     return jsonify({"message": "Email verified successfully"})
 
-# Initialize model in background thread (so gunicorn can bind the port immediately)
-def _init_model_background():
-    initialize_model()
-    if model:
-        print("AI model ready.")
-    else:
-        print("Failed to initialize AI model. Chat will be disabled.")
-
-threading.Thread(target=_init_model_background, daemon=True).start()
+# Initialize model synchronously at module load (works with gunicorn preforking)
+initialize_model()
+if model:
+    print("AI model ready.")
+else:
+    print("WARNING: Failed to initialize AI model. Chat will be disabled.")
 
 # Entry point
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5001))
-
-    if model:
-        print(f"AI model ready. Starting server on port {port}...")
-    else:
-        print("Failed to initialize AI model. Chat will be disabled.")
-
+    print(f"Starting server on port {port}...")
     app.run(debug=True, host='0.0.0.0', port=port)
