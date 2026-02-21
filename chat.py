@@ -573,11 +573,14 @@ def verify_code():
     del verification_codes[email]
     return jsonify({"message": "Email verified successfully"})
 
+# Initialize model at import time (needed for gunicorn)
+initialize_model()
+
 # Entry point
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5001))
 
-    if initialize_model():
+    if model:
         print(f"AI model ready. Starting server on port {port}...")
     else:
         print("Failed to initialize AI model. Chat will be disabled.")
