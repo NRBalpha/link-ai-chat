@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 import json
 from collections import defaultdict
 import base64
+import threading
 
 # Load environment variables
 load_dotenv()
@@ -573,8 +574,15 @@ def verify_code():
     del verification_codes[email]
     return jsonify({"message": "Email verified successfully"})
 
-# Initialize model at import time (needed for gunicorn)
-initialize_model()
+# Initialize model in background thread (so gunicorn can bind the port immediately)
+def _init_model_background():
+    initialize_model()
+    if model:
+        print("AI model ready.")
+    else:
+        print("Failed to initialize AI model. Chat will be disabled.")
+
+threading.Thread(target=_init_model_background, daemon=True).start()
 
 # Entry point
 if __name__ == '__main__':
