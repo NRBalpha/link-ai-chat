@@ -203,8 +203,9 @@ def get_default_model_name():
         return MODEL_NAME
 
     except Exception as e:
-        print(f"Failed to list models: {e}")
-        return None
+        print(f"Failed to list models: {e}. Using hardcoded fallback.")
+        MODEL_NAME = "gemini-2.0-flash"
+        return MODEL_NAME
 
 def initialize_model():
     global model, MODEL_NAME
