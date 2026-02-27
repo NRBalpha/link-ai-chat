@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up - ENKU</title>
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ENKU">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icons/icon-192.svg">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
@@ -145,59 +151,46 @@
             color: #888;
         }
 
-        .signup-form {
+        .google-button {
             display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .form-group {
-            position: relative;
-        }
-
-        .form-group input {
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 8px;
             color: #e0e0e0;
             font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--google-blue, #4285F4);
-            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
-        }
-
-        .form-group input::placeholder {
-            color: #888;
-        }
-
-        .signup-button {
-            background: linear-gradient(45deg, var(--google-blue, #4285F4), #3367D6);
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-top: 1rem;
         }
 
-        .signup-button:hover {
+        .google-button:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.25);
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(66, 133, 244, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
-        .signup-button:disabled {
-            background: #666;
+        .google-button:disabled {
+            opacity: 0.6;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
+        }
+
+        body.light-theme .google-button {
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            color: #333;
+        }
+
+        body.light-theme .google-button:hover {
+            background: #f8f8f8;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .signin-link {
@@ -261,107 +254,6 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Verification step styles */
-        .verification-step {
-            display: none;
-        }
-
-        .verification-icon {
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .verification-icon svg {
-            width: 64px;
-            height: 64px;
-            color: var(--google-blue, #4285F4);
-        }
-
-        .verification-info {
-            text-align: center;
-            margin-bottom: 1.5rem;
-            color: #aaa;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-
-        .verification-info .email-highlight {
-            color: var(--google-blue, #4285F4);
-            font-weight: 500;
-        }
-
-        .code-input-group {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            margin-bottom: 1rem;
-        }
-
-        .code-input-group input {
-            width: 48px;
-            height: 56px;
-            text-align: center;
-            font-size: 1.5rem;
-            font-weight: 600;
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 10px;
-            color: #e0e0e0;
-            transition: all 0.3s ease;
-        }
-
-        .code-input-group input:focus {
-            outline: none;
-            border-color: var(--google-blue, #4285F4);
-            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
-        }
-
-        .code-input-group input.filled {
-            border-color: var(--google-blue, #4285F4);
-            background: rgba(66, 133, 244, 0.05);
-        }
-
-        .resend-link {
-            text-align: center;
-            margin-top: 1rem;
-            color: #888;
-            font-size: 0.9rem;
-        }
-
-        .resend-link a {
-            color: var(--google-blue, #4285F4);
-            text-decoration: none;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        .resend-link a:hover {
-            text-decoration: underline;
-        }
-
-        .resend-link a.disabled {
-            color: #666;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-
-        .back-link {
-            text-align: center;
-            margin-top: 1rem;
-            color: #888;
-            font-size: 0.9rem;
-        }
-
-        .back-link a {
-            color: var(--google-blue, #4285F4);
-            text-decoration: none;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        .back-link a:hover {
-            text-decoration: underline;
-        }
 
         /* Light theme styles */
         body.light-theme {
@@ -386,19 +278,6 @@
             color: #666;
         }
 
-        body.light-theme .form-group input {
-            background: transparent;
-            color: #333;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
-        body.light-theme .form-group input::placeholder {
-            color: #888;
-        }
-
-        body.light-theme .signup-button {
-            background: linear-gradient(45deg, var(--google-blue, #4285F4), #3367D6);
-        }
 
         body.light-theme .signin-link {
             color: #666;
@@ -419,20 +298,6 @@
         body.light-theme .loading::after {
             border: 2px solid rgba(0, 0, 0, 0.1);
             border-top-color: var(--google-blue, #4285F4);
-        }
-
-        body.light-theme .code-input-group input {
-            background: transparent;
-            color: #333;
-            border: 1px solid rgba(0, 0, 0, 0.15);
-        }
-
-        body.light-theme .code-input-group input.filled {
-            background: rgba(66, 133, 244, 0.05);
-        }
-
-        body.light-theme .verification-info {
-            color: #666;
         }
     </style>
 </head>
@@ -456,71 +321,24 @@
     </div>
 
     <div class="auth-container">
-        <!-- Step 1: Sign Up Form -->
-        <div id="signup-step">
-            <div class="signup-header">
-                <h1>Create Account</h1>
-                <p>Join ENKU and start chatting</p>
-            </div>
-
-            <form class="signup-form" id="signup-form">
-                <div class="form-group">
-                    <input type="text" id="username" placeholder="Username" required>
-                </div>
-                <div class="form-group">
-                    <input type="email" id="email" placeholder="Email" required>
-                </div>
-                <div class="form-group">
-                    <input type="password" id="password" placeholder="Password" required>
-                </div>
-                <button type="submit" class="signup-button" id="signup-button">Sign Up</button>
-                <div class="error-message" id="error-message"></div>
-            </form>
-
-            <div class="signin-link">
-                Already have an account? <a href="/signin">Sign In</a>
-            </div>
+        <div class="signup-header">
+            <h1>Create Account</h1>
+            <p>Join ENKU and start chatting</p>
         </div>
 
-        <!-- Step 2: Email Verification -->
-        <div id="verification-step" class="verification-step">
-            <div class="signup-header">
-                <h1>Verify Email</h1>
-                <p>We sent a verification code to your email</p>
-            </div>
+        <button class="google-button" id="google-button" onclick="signUpWithGoogle()">
+            <svg viewBox="0 0 24 24" width="20" height="20">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+            </svg>
+            Sign up with Google
+        </button>
+        <div class="error-message" id="error-message"></div>
 
-            <div class="verification-icon">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M22 6L12 13L2 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </div>
-
-            <div class="verification-info">
-                Enter the 6-digit code sent to<br>
-                <span class="email-highlight" id="verification-email"></span>
-            </div>
-
-            <div class="code-input-group" id="code-inputs">
-                <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="one-time-code">
-                <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
-                <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
-                <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
-                <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
-                <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
-            </div>
-
-            <button class="signup-button" id="verify-button" onclick="verifyCode()" disabled>Verify & Continue</button>
-            <div class="error-message" id="verify-error"></div>
-            <div class="success-message" id="verify-success">Email verified! Redirecting...</div>
-
-            <div class="resend-link">
-                Didn't receive the code? <a id="resend-link" onclick="resendCode()">Resend Code</a>
-            </div>
-
-            <div class="back-link">
-                <a onclick="goBack()">Back to Sign Up</a>
-            </div>
+        <div class="signin-link">
+            Already have an account? <a href="/signin">Sign In</a>
         </div>
     </div>
 
@@ -531,234 +349,37 @@
     <script>
         // Initialize Firebase
         const auth = firebase.auth();
-        const signupForm = document.getElementById('signup-form');
-        const signupButton = document.getElementById('signup-button');
+        const googleProvider = new firebase.auth.GoogleAuthProvider();
         const errorMessage = document.getElementById('error-message');
 
-        let pendingUsername = '';
-        let pendingEmail = '';
-        let resendCooldown = false;
-
-        // Check if user is already signed in and verified
+        // Check if user is already signed in
         auth.onAuthStateChanged((user) => {
-            if (user && user.emailVerified) {
+            if (user) {
                 window.location.href = '/welcome';
             }
         });
 
-        // Code input handling
-        const codeInputs = document.querySelectorAll('#code-inputs input');
-        codeInputs.forEach((input, index) => {
-            input.addEventListener('input', (e) => {
-                const val = e.target.value.replace(/[^0-9]/g, '');
-                e.target.value = val;
-
-                if (val && index < codeInputs.length - 1) {
-                    codeInputs[index + 1].focus();
-                }
-
-                if (val) {
-                    e.target.classList.add('filled');
-                } else {
-                    e.target.classList.remove('filled');
-                }
-
-                // Enable verify button when all 6 digits entered
-                const code = getCode();
-                document.getElementById('verify-button').disabled = code.length !== 6;
-            });
-
-            input.addEventListener('keydown', (e) => {
-                if (e.key === 'Backspace' && !e.target.value && index > 0) {
-                    codeInputs[index - 1].focus();
-                    codeInputs[index - 1].value = '';
-                    codeInputs[index - 1].classList.remove('filled');
-                }
-                if (e.key === 'Enter') {
-                    const code = getCode();
-                    if (code.length === 6) verifyCode();
-                }
-            });
-
-            // Handle paste
-            input.addEventListener('paste', (e) => {
-                e.preventDefault();
-                const pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '');
-                for (let i = 0; i < Math.min(pasted.length, 6); i++) {
-                    codeInputs[i].value = pasted[i];
-                    codeInputs[i].classList.add('filled');
-                }
-                const focusIdx = Math.min(pasted.length, 5);
-                codeInputs[focusIdx].focus();
-                document.getElementById('verify-button').disabled = pasted.length < 6;
-            });
-        });
-
-        function getCode() {
-            return Array.from(codeInputs).map(i => i.value).join('');
-        }
-
-        // Form submission - Step 1
-        signupForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            pendingUsername = document.getElementById('username').value;
-            pendingEmail = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
+        // Google Sign Up
+        async function signUpWithGoogle() {
+            const btn = document.getElementById('google-button');
             try {
-                signupButton.disabled = true;
-                signupButton.classList.add('loading');
-                signupButton.textContent = '';
+                btn.disabled = true;
+                btn.classList.add('loading');
+                btn.textContent = '';
                 errorMessage.style.display = 'none';
 
-                // Create user with Firebase
-                const userCredential = await auth.createUserWithEmailAndPassword(pendingEmail, password);
-
-                // Update profile with username
-                await userCredential.user.updateProfile({
-                    displayName: pendingUsername
-                });
-
-                // Send verification code via backend
-                const response = await fetch('/send-verification', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: pendingEmail })
-                });
-
-                const data = await response.json();
-                if (!response.ok) {
-                    throw new Error(data.error || 'Failed to send verification code');
-                }
-
-                // Show verification step
-                showVerificationStep();
+                await auth.signInWithPopup(googleProvider);
+                window.location.href = '/welcome';
 
             } catch (error) {
-                errorMessage.textContent = error.message;
-                errorMessage.style.display = 'block';
-                signupButton.disabled = false;
-                signupButton.classList.remove('loading');
-                signupButton.textContent = 'Sign Up';
-            }
-        });
-
-        function showVerificationStep() {
-            document.getElementById('signup-step').style.display = 'none';
-            document.getElementById('verification-step').style.display = 'block';
-            document.getElementById('verification-email').textContent = pendingEmail;
-            codeInputs[0].focus();
-        }
-
-        // Verify the code - Step 2
-        async function verifyCode() {
-            const code = getCode();
-            if (code.length !== 6) return;
-
-            const verifyButton = document.getElementById('verify-button');
-            const verifyError = document.getElementById('verify-error');
-            const verifySuccess = document.getElementById('verify-success');
-
-            try {
-                verifyButton.disabled = true;
-                verifyButton.classList.add('loading');
-                verifyButton.textContent = '';
-                verifyError.style.display = 'none';
-
-                const response = await fetch('/verify-code', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: pendingEmail, code: code })
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.error || 'Invalid verification code');
+                if (error.code !== 'auth/popup-closed-by-user') {
+                    errorMessage.textContent = error.message;
+                    errorMessage.style.display = 'block';
                 }
-
-                // Success
-                verifySuccess.style.display = 'block';
-                setTimeout(() => {
-                    window.location.href = '/welcome';
-                }, 1500);
-
-            } catch (error) {
-                verifyError.textContent = error.message;
-                verifyError.style.display = 'block';
-                verifyButton.disabled = false;
-                verifyButton.classList.remove('loading');
-                verifyButton.textContent = 'Verify & Continue';
-
-                // Clear code inputs
-                codeInputs.forEach(input => {
-                    input.value = '';
-                    input.classList.remove('filled');
-                });
-                codeInputs[0].focus();
+                btn.disabled = false;
+                btn.classList.remove('loading');
+                btn.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg> Sign up with Google`;
             }
-        }
-
-        // Resend verification code
-        async function resendCode() {
-            if (resendCooldown) return;
-
-            const resendLink = document.getElementById('resend-link');
-            const verifyError = document.getElementById('verify-error');
-
-            try {
-                resendCooldown = true;
-                resendLink.classList.add('disabled');
-                resendLink.textContent = 'Sending...';
-                verifyError.style.display = 'none';
-
-                const response = await fetch('/send-verification', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: pendingEmail })
-                });
-
-                const data = await response.json();
-                if (!response.ok) {
-                    throw new Error(data.error || 'Failed to resend code');
-                }
-
-                // Show cooldown timer
-                let seconds = 60;
-                resendLink.textContent = `Resend in ${seconds}s`;
-                const timer = setInterval(() => {
-                    seconds--;
-                    resendLink.textContent = `Resend in ${seconds}s`;
-                    if (seconds <= 0) {
-                        clearInterval(timer);
-                        resendLink.textContent = 'Resend Code';
-                        resendLink.classList.remove('disabled');
-                        resendCooldown = false;
-                    }
-                }, 1000);
-
-            } catch (error) {
-                verifyError.textContent = error.message;
-                verifyError.style.display = 'block';
-                resendLink.textContent = 'Resend Code';
-                resendLink.classList.remove('disabled');
-                resendCooldown = false;
-            }
-        }
-
-        // Go back to sign up form
-        function goBack() {
-            // Delete the unverified user
-            const user = auth.currentUser;
-            if (user) {
-                user.delete().catch(() => {});
-            }
-            document.getElementById('verification-step').style.display = 'none';
-            document.getElementById('signup-step').style.display = 'block';
-            signupButton.disabled = false;
-            signupButton.classList.remove('loading');
-            signupButton.textContent = 'Sign Up';
         }
 
         // Theme management
@@ -797,6 +418,11 @@
             }
             updateThemeIcon();
         });
+    </script>
+    <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js');
+    }
     </script>
 </body>
 </html>

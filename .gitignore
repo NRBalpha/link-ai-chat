@@ -11,3 +11,4 @@ get-pip.py
 particles.js-master/
 chat.py.backup
 *.output
+.vercel

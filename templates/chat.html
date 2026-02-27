@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ENKU</title>
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ENKU">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icons/icon-192.svg">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/marked@12.0.0/marked.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css" id="hljs-dark">
@@ -21,7 +27,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', sans-serif;
-            background: #141414;
+            background: #0f0f11;
             color: #e0e0e0;
             height: 100vh;
             display: flex;
@@ -47,7 +53,7 @@
                 10px 10px;
             pointer-events: none;
             z-index: 0;
-            opacity: 0.3;
+            opacity: 0.15;
         }
         .sidebar, .main { position: relative; z-index: 1; }
 
@@ -61,7 +67,7 @@
             display: flex;
             flex-direction: column;
             border-right: 1px solid #2a2a2a;
-            transition: margin-left 0.3s ease;
+            transition: margin-left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .sidebar.hidden { margin-left: -260px; }
         .sidebar-header {
@@ -120,7 +126,7 @@
             position: relative;
         }
         .chat-item:hover { background: #2a2a2a; }
-        .chat-item.active { background: #2a2a2a; }
+        .chat-item.active { background: #2a2a2a; border-left: 3px solid #6366f1; padding-left: 7px; }
         .chat-item-title {
             flex: 1;
             font-size: 13px;
@@ -253,20 +259,44 @@
         .message-row {
             max-width: 720px;
             margin: 0 auto;
-            padding: 6px 24px;
+            padding: 10px 24px;
             display: flex;
             flex-direction: column;
+            animation: msgSlideIn 0.3s ease-out;
+        }
+        @keyframes msgSlideIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .message-row.user { align-items: flex-end; }
         .message-row.assistant { align-items: flex-start; }
         .message-sender {
-            font-size: 11px;
-            font-weight: 600;
-            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
             padding: 0 4px;
         }
-        .message-row.user .message-sender { color: #8bb3e6; }
-        .message-row.assistant .message-sender { color: #90c790; }
+        .message-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: #fff;
+            flex-shrink: 0;
+        }
+        .message-row.user .message-avatar { background: #6366f1; }
+        .message-row.assistant .message-avatar { background: #22c55e; }
+        .message-sender-name {
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .message-row.user .message-sender-name { color: #8bb3e6; }
+        .message-row.assistant .message-sender-name { color: #90c790; }
         .message-body {
             font-size: 14px;
             line-height: 1.7;
@@ -424,6 +454,19 @@
             transition: opacity 0.2s ease;
         }
 
+        /* ── Topbar Logo ── */
+        .topbar-logo {
+            font-size: 16px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #6366f1, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.5px;
+            margin-right: 4px;
+            flex-shrink: 0;
+        }
+
         /* ── Welcome ── */
         .welcome {
             flex: 1;
@@ -431,11 +474,66 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 16px;
+            color: #666;
+            padding: 24px;
+        }
+        .welcome-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #6366f1, #a78bfa);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: welcomePulse 3s ease-in-out infinite;
+        }
+        .welcome-icon svg { width: 26px; height: 26px; color: #fff; }
+        @keyframes welcomePulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.3); }
+            50% { transform: scale(1.05); box-shadow: 0 0 20px 4px rgba(99, 102, 241, 0.15); }
+        }
+        .welcome h2 {
+            font-size: 26px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #e0e0e0 0%, #a78bfa 50%, #6366f1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .welcome p { font-size: 15px; color: #888; }
+        .suggestions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 12px;
+            max-width: 480px;
+            width: 100%;
+        }
+        .suggestion-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid #2a2a2a;
+            border-radius: 14px;
+            padding: 14px 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+        .suggestion-card:hover {
+            background: rgba(99, 102, 241, 0.08);
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateY(-1px);
+        }
+        .suggestion-card-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: #ccc;
+            margin-bottom: 4px;
+        }
+        .suggestion-card-desc {
+            font-size: 12px;
             color: #666;
         }
-        .welcome h2 { font-size: 22px; font-weight: 500; color: #ccc; }
-        .welcome p { font-size: 14px; }
 
         /* ── Input ── */
         .input-area {
@@ -454,7 +552,7 @@
             transition: border-color 0.15s;
             overflow: hidden;
         }
-        .input-box:focus-within { border-color: #555; }
+        .input-box:focus-within { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15); }
         .input-box textarea {
             width: 100%;
             background: none;
@@ -502,9 +600,9 @@
             flex-shrink: 0;
         }
         .input-btn:hover { color: #ccc; }
-        .input-btn.send-btn { color: #999; }
-        .input-btn.send-btn:hover { color: #ccc; }
-        .input-btn.send-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .input-btn.send-btn { color: #fff; background: #6366f1; border-radius: 50%; padding: 6px; }
+        .input-btn.send-btn:hover { background: #5558e6; color: #fff; }
+        .input-btn.send-btn:disabled { opacity: 0.3; cursor: not-allowed; background: #3a3a3a; color: #666; }
         .input-btn svg { width: 18px; height: 18px; }
         .input-btn.voice-btn { color: #999; }
         .input-btn.voice-btn:hover { color: #ccc; }
@@ -598,7 +696,7 @@
         body.light-theme .chat-list::-webkit-scrollbar-thumb { background: #ccc; }
         body.light-theme .date-group-label { color: #888; }
         body.light-theme .chat-item:hover { background: #f0f0f0; }
-        body.light-theme .chat-item.active { background: #e8e8e8; }
+        body.light-theme .chat-item.active { background: #e8e8e8; border-left: 3px solid #6366f1; padding-left: 7px; }
         body.light-theme .chat-item-title { color: #444; }
         body.light-theme .chat-item.active .chat-item-title { color: #111; }
         body.light-theme .chat-item-actions button { color: #888; }
@@ -620,8 +718,8 @@
 
         /* Messages */
         body.light-theme .messages::-webkit-scrollbar-thumb { background: #ccc; }
-        body.light-theme .message-row.user .message-sender { color: #6366f1; }
-        body.light-theme .message-row.assistant .message-sender { color: #16a34a; }
+        body.light-theme .message-row.user .message-sender-name { color: #6366f1; }
+        body.light-theme .message-row.assistant .message-sender-name { color: #16a34a; }
         body.light-theme .message-row.user .message-body {
             background: #6366f1;
             color: #fff;
@@ -656,17 +754,33 @@
 
         /* Welcome */
         body.light-theme .welcome { color: #999; }
-        body.light-theme .welcome h2 { color: #333; }
+        body.light-theme .welcome h2 {
+            background: linear-gradient(135deg, #333 0%, #6366f1 50%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        body.light-theme .welcome p { color: #888; }
+        body.light-theme .suggestion-card {
+            background: rgba(0, 0, 0, 0.02);
+            border-color: #e0e0e0;
+        }
+        body.light-theme .suggestion-card:hover {
+            background: rgba(99, 102, 241, 0.06);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+        body.light-theme .suggestion-card-title { color: #333; }
+        body.light-theme .suggestion-card-desc { color: #888; }
 
         /* Input */
         body.light-theme .input-box { background: #fff; border-color: #ddd; }
-        body.light-theme .input-box:focus-within { border-color: #bbb; }
+        body.light-theme .input-box:focus-within { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12); }
         body.light-theme .input-box textarea { color: #333; }
         body.light-theme .input-box textarea::placeholder { color: #999; }
         body.light-theme .input-btn { color: #999; }
         body.light-theme .input-btn:hover { color: #333; }
-        body.light-theme .input-btn.send-btn { color: #999; }
-        body.light-theme .input-btn.send-btn:hover { color: #333; }
+        body.light-theme .input-btn.send-btn { color: #fff; background: #6366f1; }
+        body.light-theme .input-btn.send-btn:hover { background: #5558e6; color: #fff; }
         body.light-theme .input-btn.voice-btn { color: #999; }
         body.light-theme .input-btn.voice-btn:hover { color: #333; }
         body.light-theme .input-btn.voice-btn.recording { color: #ef4444; }
@@ -683,6 +797,7 @@
             .message-row { padding: 6px 16px; }
             .input-area { padding: 8px 16px 16px; }
             .input-box textarea { font-size: 16px; }
+            .suggestions-grid { grid-template-columns: 1fr; max-width: 320px; }
         }
     </style>
 </head>
@@ -712,6 +827,7 @@
             <button class="topbar-btn" onclick="toggleSidebar()" title="Toggle sidebar">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
             </button>
+            <span class="topbar-logo">ENKU</span>
             <div class="topbar-title-area" id="topbarTitleArea">
                 <span class="topbar-title" id="topbarTitle">New chat</span>
                 <button class="topbar-rename-btn" onclick="startTopbarRename()" title="Rename chat">
@@ -736,8 +852,29 @@
 
         <div class="messages" id="messages">
             <div class="welcome" id="welcome">
+                <div class="welcome-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                </div>
                 <h2>ENKU</h2>
-                <p>How can I help you today?</p>
+                <p id="welcomeSub">How can I help you today?</p>
+                <div class="suggestions-grid" id="suggestionsGrid">
+                    <div class="suggestion-card" onclick="startWith('suggest1')">
+                        <div class="suggestion-card-title" data-suggest="1"></div>
+                        <div class="suggestion-card-desc" data-suggest-desc="1"></div>
+                    </div>
+                    <div class="suggestion-card" onclick="startWith('suggest2')">
+                        <div class="suggestion-card-title" data-suggest="2"></div>
+                        <div class="suggestion-card-desc" data-suggest-desc="2"></div>
+                    </div>
+                    <div class="suggestion-card" onclick="startWith('suggest3')">
+                        <div class="suggestion-card-title" data-suggest="3"></div>
+                        <div class="suggestion-card-desc" data-suggest-desc="3"></div>
+                    </div>
+                    <div class="suggestion-card" onclick="startWith('suggest4')">
+                        <div class="suggestion-card-title" data-suggest="4"></div>
+                        <div class="suggestion-card-desc" data-suggest-desc="4"></div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -817,6 +954,10 @@
             you: 'You', linkAi: 'ENKU', capture: 'Capture', cancel: 'Cancel',
             saveSubmit: 'Save & Submit', listening: 'Listening...',
             disclaimer: 'ENKU is AI and can make mistakes. Please double-check responses.',
+            suggest1: 'Write a story', suggest1Desc: 'Create a short creative story',
+            suggest2: 'Explain a concept', suggest2Desc: 'Break down a complex topic simply',
+            suggest3: 'Help me with code', suggest3Desc: 'Debug, write, or explain code',
+            suggest4: 'Translate text', suggest4Desc: 'Translate between languages',
         },
         am: {
             newChat: 'አዲስ ውይይት', searchChats: 'ውይይቶችን ፈልግ...', welcomeTitle: 'እንቁ',
@@ -826,6 +967,10 @@
             you: 'እርስዎ', linkAi: 'እንቁ', capture: 'ቀረጻ', cancel: 'ሰርዝ',
             saveSubmit: 'አስቀምጥ እና ላክ', listening: 'በማዳመጥ ላይ...',
             disclaimer: 'ENKU AI ነው እና ስህተት ሊሠራ ይችላል። እባክዎ መልሶችን ደግመው ያረጋግጡ።',
+            suggest1: 'ታሪክ ጻፍ', suggest1Desc: 'አጭር የፈጠራ ታሪክ ፍጠር',
+            suggest2: 'ጽንሰ-ሐሳብ አብራራ', suggest2Desc: 'ውስብስብ ርዕስን በቀላሉ ግለጽ',
+            suggest3: 'በኮድ እርዳኝ', suggest3Desc: 'ኮድ ጻፍ፣ አስተካክል ወይም አብራራ',
+            suggest4: 'ጽሑፍ ተርጉም', suggest4Desc: 'በቋንቋዎች መካከል ተርጉም',
         },
         so: {
             newChat: 'Sheeko cusub', searchChats: 'Raadi...', welcomeTitle: 'Luul',
@@ -835,6 +980,10 @@
             you: 'Adiga', linkAi: 'Luul', capture: 'Qaad', cancel: 'Jooji',
             saveSubmit: 'Keydi oo dir', listening: 'Dhageysanayaa...',
             disclaimer: 'ENKU waa AI wuxuuna samayn karaa qalado. Fadlan hubi jawaabaha.',
+            suggest1: 'Sheeko qor', suggest1Desc: 'Sheeko gaaban oo hal-abuur ah samee',
+            suggest2: 'Fikrad sharax', suggest2Desc: 'Mawduuc adag si fudud u sharax',
+            suggest3: 'Koodh iga caawi', suggest3Desc: 'Koodh qor, hagaaji ama sharax',
+            suggest4: 'Qoraal turjum', suggest4Desc: 'Luqadaha kala duwan u turjum',
         },
         om: {
             newChat: 'Haasaa haaraa', searchChats: 'Barbaadi...', welcomeTitle: 'Inqu',
@@ -844,6 +993,10 @@
             you: 'Ati', linkAi: 'Inqu', capture: 'Kaasuu', cancel: 'Haquu',
             saveSubmit: 'Olkaa\'ii fi ergi', listening: 'Dhaggeeffachaa jira...',
             disclaimer: 'ENKU AI dha, dogoggora hojjechuu danda\'a. Maaloo deebii irra deebi\'ii mirkaneeffadhaa.',
+            suggest1: 'Seenaa barreessi', suggest1Desc: 'Seenaa gabaabaa uumi',
+            suggest2: 'Yaada ibsi', suggest2Desc: 'Mata duree walxaxaa salphaatti ibsi',
+            suggest3: 'Koodii na gargaari', suggest3Desc: 'Koodii barreessi, sirreessi ykn ibsi',
+            suggest4: 'Barreeffama hiiki', suggest4Desc: 'Afaanota gidduu hiiki',
         },
         ti: {
             newChat: 'ሓድሽ ዕላል', searchChats: 'ድለ...', welcomeTitle: 'እንቁ',
@@ -853,6 +1006,10 @@
             you: 'ንስኻ', linkAi: 'እንቁ', capture: 'ቅረጽ', cancel: 'ሰርዝ',
             saveSubmit: 'ዓቅብ እሞ ስደድ', listening: 'ይሰምዕ ኣሎ...',
             disclaimer: 'እንቁ AI እዩ ጌጋ ክገብር ይኽእል። በጃኹም መልስታት ደጊምኩም ኣረጋግጹ።',
+            suggest1: 'ዛንታ ጸሓፍ', suggest1Desc: 'ሓጻር ፈጠራዊ ዛንታ ስራሕ',
+            suggest2: 'ሓሳብ ኣብርህ', suggest2Desc: 'ዝተሓላለኸ ኣርእስቲ ብቐሊሉ ግለጽ',
+            suggest3: 'ብኮድ ሓግዘኒ', suggest3Desc: 'ኮድ ጸሓፍ፣ ኣስተኻኽል ወይ ኣብርህ',
+            suggest4: 'ጽሑፍ ተርጉም', suggest4Desc: 'ብመንጎ ቋንቋታት ተርጉም',
         },
     };
 
@@ -872,7 +1029,16 @@
             `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> ${t('newChat')}`;
         searchInput.placeholder = t('searchChats');
         welcomeEl.querySelector('h2').textContent = t('welcomeTitle');
-        welcomeEl.querySelector('p').textContent = t('welcomeSub');
+        document.getElementById('welcomeSub').textContent = t('welcomeSub');
+        // Update suggestion cards
+        document.querySelectorAll('[data-suggest]').forEach(el => {
+            const n = el.getAttribute('data-suggest');
+            el.textContent = t('suggest' + n);
+        });
+        document.querySelectorAll('[data-suggest-desc]').forEach(el => {
+            const n = el.getAttribute('data-suggest-desc');
+            el.textContent = t('suggest' + n + 'Desc');
+        });
         messageInput.placeholder = t('placeholder');
         // Attach menu items
         const menuItems = document.querySelectorAll('.attach-menu-item');
@@ -883,6 +1049,15 @@
         // Re-render messages to update sender labels
         renderMessages();
         renderChatList();
+    }
+
+    // ── Suggestion card click ──
+    function startWith(key) {
+        const text = t(key);
+        if (!text) return;
+        messageInput.value = text;
+        messageInput.focus();
+        sendMessage();
     }
 
     // ── Markdown setup ──
@@ -1047,16 +1222,16 @@
         let html = '';
         chat.messages.forEach((msg, idx) => {
             const isUser = msg.role === 'user';
-            const sender = isUser ? t('you') : t('linkAi');
             const body = isUser
                 ? DOMPurify.sanitize(msg.content).replace(/\n/g, '<br>')
                 : renderMd(msg.content);
             const editBtn = isUser
                 ? `<button class="msg-action-btn" onclick="startEditMessage(${idx})" title="Edit">${ICON_EDIT}</button>`
                 : '';
+            const senderHtml = isUser ? '' : `<div class="message-sender"><span class="message-avatar">${t('linkAi').charAt(0).toUpperCase()}</span><span class="message-sender-name">${t('linkAi')}</span></div>`;
             html += `
             <div class="message-row ${msg.role}" data-msg-idx="${idx}">
-                <div class="message-sender">${sender}</div>
+                ${senderHtml}
                 <div class="message-body">${body}</div>
                 <div class="message-actions">
                     ${editBtn}
@@ -1144,7 +1319,7 @@
             if (!res.ok) { const err = await res.json(); throw new Error(err.error || 'Server error'); }
             const row = document.createElement('div');
             row.className = 'message-row assistant';
-            row.innerHTML = `<div class="message-sender">${t('linkAi')}</div><div class="message-body"></div>`;
+            row.innerHTML = `<div class="message-sender"><span class="message-avatar">${t('linkAi').charAt(0).toUpperCase()}</span><span class="message-sender-name">${t('linkAi')}</span></div><div class="message-body"></div>`;
             const typingRow = document.getElementById('typingRow');
             if (typingRow) messagesEl.insertBefore(row, typingRow);
             else messagesEl.appendChild(row);
@@ -1273,7 +1448,7 @@
 
                 const row = document.createElement('div');
                 row.className = 'message-row assistant';
-                row.innerHTML = `<div class="message-sender">${t('linkAi')}</div><div class="message-body"></div>`;
+                row.innerHTML = `<div class="message-sender"><span class="message-avatar">${t('linkAi').charAt(0).toUpperCase()}</span><span class="message-sender-name">${t('linkAi')}</span></div><div class="message-body"></div>`;
                 // Insert response row BEFORE the typing indicator
                 const typingRow = document.getElementById('typingRow');
                 if (typingRow) messagesEl.insertBefore(row, typingRow);
@@ -1450,102 +1625,104 @@
         el.style.height = Math.min(el.scrollHeight, 200) + 'px';
     }
 
-    // ── Voice input (MediaRecorder + Gemini transcription) ──
+    // ── Voice input (Web Speech API - real-time transcription) ──
     const voiceBtn = document.getElementById('voiceBtn');
-    let mediaRecorder = null;
-    let audioChunks = [];
+    let recognition = null;
     let isRecording = false;
-    let audioStream = null;
+    let silenceTimer = null;
+    const SILENCE_TIMEOUT = 5000; // 5 seconds of silence → auto-send
+
+    const LANG_MAP = { en: 'en-US', am: 'am-ET', so: 'so-SO', om: 'om-ET', ti: 'ti-ET' };
 
     function toggleVoice() {
         if (isRecording) {
-            stopVoice();
+            stopVoice(false);
         } else {
             startVoice();
         }
     }
 
-    async function startVoice() {
-        try {
-            audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        } catch (err) {
-            alert('Microphone access denied. Please allow microphone access in your browser settings and try again.');
+    function startVoice() {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            alert('Speech recognition is not supported in this browser. Please use Chrome.');
             return;
         }
 
-        audioChunks = [];
-        // Prefer webm/opus, fall back to whatever the browser supports
-        const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
-            ? 'audio/webm;codecs=opus'
-            : MediaRecorder.isTypeSupported('audio/webm')
-                ? 'audio/webm'
-                : 'audio/mp4';
+        recognition = new SpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = LANG_MAP[currentLang] || 'en-US';
 
-        try {
-            mediaRecorder = new MediaRecorder(audioStream, { mimeType });
-        } catch (e) {
-            mediaRecorder = new MediaRecorder(audioStream);
-        }
+        let finalTranscript = '';
 
-        mediaRecorder.ondataavailable = (e) => {
-            if (e.data.size > 0) audioChunks.push(e.data);
-        };
+        recognition.onresult = (event) => {
+            // Reset silence timer on every new result
+            clearTimeout(silenceTimer);
 
-        mediaRecorder.onstop = async () => {
-            // Stop all tracks
-            audioStream.getTracks().forEach(t => t.stop());
-            audioStream = null;
-
-            if (audioChunks.length === 0) return;
-
-            const audioBlob = new Blob(audioChunks, { type: mediaRecorder.mimeType });
-            audioChunks = [];
-
-            // Show transcribing state
-            messageInput.placeholder = 'Transcribing...';
-            messageInput.disabled = true;
-            voiceBtn.disabled = true;
-
-            try {
-                const formData = new FormData();
-                formData.append('audio', audioBlob, 'voice.webm');
-                formData.append('language', currentLang);
-
-                const res = await fetch('/transcribe', { method: 'POST', body: formData });
-                const data = await res.json();
-
-                if (data.error) throw new Error(data.error);
-
-                if (data.text) {
-                    const existing = messageInput.value;
-                    messageInput.value = existing + (existing ? ' ' : '') + data.text;
-                    autoResize(messageInput);
+            let interim = '';
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                const transcript = event.results[i][0].transcript;
+                if (event.results[i].isFinal) {
+                    finalTranscript += transcript + ' ';
+                } else {
+                    interim += transcript;
                 }
-            } catch (err) {
-                console.error('Transcription failed:', err);
-                // Fallback: show error inline
-                const existing = messageInput.value;
-                if (!existing) messageInput.placeholder = 'Voice transcription failed. Please type instead.';
-            } finally {
-                messageInput.disabled = false;
-                voiceBtn.disabled = false;
-                messageInput.placeholder = t('placeholder');
-                messageInput.focus();
+            }
+
+            // Show live transcription in the input
+            messageInput.value = finalTranscript + interim;
+            autoResize(messageInput);
+
+            // Start 5s silence timer — if no new speech, auto-send
+            if (finalTranscript.trim() || interim.trim()) {
+                silenceTimer = setTimeout(() => {
+                    stopVoice(true);
+                }, SILENCE_TIMEOUT);
             }
         };
 
-        mediaRecorder.start(250); // collect data every 250ms
-        isRecording = true;
-        voiceBtn.classList.add('recording');
-        messageInput.placeholder = t('listening');
+        recognition.onerror = (event) => {
+            console.error('Speech recognition error:', event.error);
+            if (event.error === 'not-allowed') {
+                alert('Microphone access denied. Please allow microphone access in your browser settings.');
+            }
+            stopVoice(false);
+        };
+
+        recognition.onend = () => {
+            // If still in recording mode, recognition ended unexpectedly (e.g. silence) — restart it
+            if (isRecording) {
+                try { recognition.start(); } catch(e) {}
+            }
+        };
+
+        try {
+            recognition.start();
+            isRecording = true;
+            voiceBtn.classList.add('recording');
+            messageInput.placeholder = t('listening');
+            messageInput.focus();
+        } catch (err) {
+            console.error('Failed to start speech recognition:', err);
+        }
     }
 
-    function stopVoice() {
-        if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-            mediaRecorder.stop();
-        }
+    function stopVoice(autoSend) {
+        clearTimeout(silenceTimer);
         isRecording = false;
         voiceBtn.classList.remove('recording');
+        messageInput.placeholder = t('placeholder');
+
+        if (recognition) {
+            recognition.onend = null; // prevent auto-restart
+            try { recognition.stop(); } catch(e) {}
+            recognition = null;
+        }
+
+        if (autoSend && messageInput.value.trim()) {
+            sendMessage();
+        }
     }
 
     // ── Sidebar toggle ──
@@ -1618,6 +1795,11 @@
         messageInput.value = starterPrompt;
         // Auto-send after a brief delay so the UI is ready
         setTimeout(() => sendMessage(), 300);
+    }
+    </script>
+    <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js');
     }
     </script>
 </body>

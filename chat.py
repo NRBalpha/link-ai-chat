@@ -7,11 +7,11 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime, timedelta
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 from dotenv import load_dotenv
 import json
 from collections import defaultdict
-import base64
 
 # Load environment variables
 load_dotenv()
@@ -51,10 +51,10 @@ GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 if not GEMINI_API_KEY:
     raise EnvironmentError("GEMINI_API_KEY not found. Please check your .env file.")
 
-genai.configure(api_key=GEMINI_API_KEY)
+client = genai.Client(api_key=GEMINI_API_KEY)
 
-MODEL_NAME = os.getenv('GEMINI_MODEL', 'gemini-2.0-flash')
-model = None
+MODEL_NAME = os.getenv('GEMINI_MODEL', 'gemini-2.5-flash')
+FALLBACK_MODELS = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-2.0-flash-lite']
 
 SYSTEM_INSTRUCTION = (
     "You are ENKU, a smart assistant embedded in the ENKU superapp. "
@@ -166,26 +166,22 @@ SYSTEM_INSTRUCTION = (
     "- Use conversation history to provide contextually relevant responses"
 )
 
+GENERATION_CONFIG = types.GenerateContentConfig(
+    temperature=0.85,
+    top_p=0.9,
+    top_k=40,
+    max_output_tokens=8192,
+    system_instruction=SYSTEM_INSTRUCTION,
+)
+
+model_ready = False
+
 def initialize_model():
-    global model, MODEL_NAME
-    try:
-        print(f"Initializing Gemini model: {MODEL_NAME}")
-        model = genai.GenerativeModel(
-            MODEL_NAME,
-            generation_config={
-                'temperature': 0.85,
-                'top_p': 0.9,
-                'top_k': 40,
-                'max_output_tokens': 8192,
-            },
-            system_instruction=SYSTEM_INSTRUCTION
-        )
-        print("Model initialized successfully.")
-        return True
-    except Exception as e:
-        print(f"Error initializing model: {str(e)}")
-        model = None
-        return False
+    """Mark model as ready without blocking startup with an API call.
+    The actual model availability is validated on the first request."""
+    global model_ready
+    model_ready = True
+    print(f"Model configured: {MODEL_NAME}")
 
 def handle_api_error(e):
     error_message = str(e)
@@ -215,12 +211,12 @@ def build_contents(conversation_history, message=None, language='en'):
         role = 'user' if msg.get('role') == 'user' else 'model'
         content = msg.get('content', '')
         if content:
-            contents.append({'role': role, 'parts': [content]})
+            contents.append(types.Content(role=role, parts=[types.Part.from_text(text=content)]))
     if message:
         lang_instruction = LANGUAGE_INSTRUCTIONS.get(language, '')
         if lang_instruction:
             message = f"[{lang_instruction}]\n\n{message}"
-        contents.append({'role': 'user', 'parts': [message]})
+        contents.append(types.Content(role='user', parts=[types.Part.from_text(text=message)]))
     return contents
 
 # Flask Routes
@@ -282,8 +278,6 @@ def chat():
                     with open(file_path, 'rb') as img_file:
                         image_data = img_file.read()
 
-                    image_b64 = base64.b64encode(image_data).decode('utf-8')
-
                     prompt_text = message if message else (
                         "Please analyze this image. Provide:\n"
                         "1. A brief overview of what you see\n"
@@ -295,13 +289,17 @@ def chat():
                         prompt_text = f"[{lang_instr}]\n\n{prompt_text}"
 
                     content = [
-                        prompt_text,
-                        {"mime_type": file.mimetype, "data": image_b64}
+                        types.Part.from_text(text=prompt_text),
+                        types.Part.from_bytes(data=image_data, mime_type=file.mimetype),
                     ]
 
-                    if model:
+                    if model_ready:
                         try:
-                            response = model.generate_content(content)
+                            response = client.models.generate_content(
+                                model=MODEL_NAME,
+                                contents=content,
+                                config=GENERATION_CONFIG,
+                            )
                             answer = response.text if response and response.text else "I couldn't analyze this image."
                         except Exception as e:
                             error_msg, _ = handle_api_error(e)
@@ -326,9 +324,13 @@ def chat():
                     if lang_instr:
                         prompt_text = f"[{lang_instr}]\n\n{prompt_text}"
 
-                    if model:
+                    if model_ready:
                         try:
-                            response = model.generate_content(prompt_text)
+                            response = client.models.generate_content(
+                                model=MODEL_NAME,
+                                contents=prompt_text,
+                                config=GENERATION_CONFIG,
+                            )
                             answer = response.text if response and response.text else "I couldn't analyze this file."
                         except Exception as e:
                             error_msg, _ = handle_api_error(e)
@@ -362,13 +364,17 @@ def chat():
         if not message:
             return jsonify({"error": "No message provided"}), 400
 
-        if not model:
+        if not model_ready:
             return jsonify({"error": "AI model is not available. Please restart the server."}), 503
 
         contents = build_contents(conversation_history, message, language)
 
         try:
-            response = model.generate_content(contents)
+            response = client.models.generate_content(
+                model=MODEL_NAME,
+                contents=contents,
+                config=GENERATION_CONFIG,
+            )
             answer = response.text if response and response.text else "I'm not sure how to respond to that."
         except Exception as e:
             error_msg, status_code = handle_api_error(e)
@@ -390,7 +396,7 @@ def chat_stream():
     if not data or not data.get('message', '').strip():
         return jsonify({"error": "No message provided"}), 400
 
-    if not model:
+    if not model_ready:
         return jsonify({"error": "AI model is not available."}), 503
 
     message = data['message'].strip()
@@ -400,7 +406,11 @@ def chat_stream():
 
     def generate():
         try:
-            response = model.generate_content(contents, stream=True)
+            response = client.models.generate_content_stream(
+                model=MODEL_NAME,
+                contents=contents,
+                config=GENERATION_CONFIG,
+            )
             for chunk in response:
                 if chunk.text:
                     yield f"data: {json.dumps({'text': chunk.text})}\n\n"
@@ -528,8 +538,8 @@ def verify_code():
 
 # Initialize model synchronously at module load (works with gunicorn preforking)
 initialize_model()
-if model:
-    print("AI model ready.")
+if model_ready:
+    print(f"AI model ready: {MODEL_NAME}")
 else:
     print("WARNING: Failed to initialize AI model. Chat will be disabled.")
 
